@@ -21,13 +21,15 @@ public class Algorithm {
         this.processList = list;
         int maxArrivalTime = this.count;
         int maxPriority = 10;
+        int maxNeedTime = 15;
         Random r = new Random();
         this.processList.removeAll();
         for(int i=0;i<this.count;i++){
             String arrivalTime = String.valueOf(r.nextInt(maxArrivalTime));
             String priority = String.valueOf(r.nextInt(maxPriority));
             String processId = String.valueOf(i+1);
-            PCB pcb = new PCB(processId,priority,arrivalTime);
+            String needTime = String.valueOf(r.nextInt(maxNeedTime));
+            PCB pcb = new PCB(processId,priority,arrivalTime,needTime);
             this.processList.add(pcb);
         }
 
