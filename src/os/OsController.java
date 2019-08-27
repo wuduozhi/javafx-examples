@@ -3,7 +3,10 @@ package os;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -121,9 +124,12 @@ public class OsController implements Initializable,Runnable {
 
             while(processWorkTime < processNeedTime){
                 double process = processWorkTime / processNeedTime;
-                this.curentProcessBar.setProgress(process);
-                this.curentProcessIndicator.setProgress(process);
-                this.setCurentPcb(pcb);
+                // 在 Javafx 主线程中修改
+                Platform.runLater(() -> {
+                    this.curentProcessBar.setProgress(process);
+                    this.curentProcessIndicator.setProgress(process);
+                    this.setCurentPcb(pcb);
+                });
                 try{
                     Thread.sleep(1000);
                 }catch (Exception e){
@@ -147,4 +153,5 @@ public class OsController implements Initializable,Runnable {
         this.curentProcessWorkTime.setText(pcb.getWorkTime());
         this.curentProcessTotalTime.setText(pcb.getNeedTime());
     }
+
 }
