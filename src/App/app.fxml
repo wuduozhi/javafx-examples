@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+
+<TabPane fx:id="tabPane" fx:controller="App.AppController" xmlns="http://javafx.com/javafx/8.0.40"
+         xmlns:fx="http://www.w3.org/2001/XInclude">
+    <tabs>
+        <Tab fx:id="osTabPage" text="OsTab">
+            <fx:include  source="../os/os.fxml"/>
+        </Tab>
+        <Tab  fx:id="produceTabPage" text="ProduceTab">
+            <fx:include source="../produce/application/MyScene.fxml"/>
+        </Tab>
+    </tabs>
+</TabPane>
