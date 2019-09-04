@@ -1,5 +1,6 @@
 package os;
 
+import com.sun.org.apache.bcel.internal.generic.ALOAD;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -96,6 +97,8 @@ public class OsController implements Initializable,Runnable {
             this.algorithm = new PriorityAlgorithm();
         }else if(algo.equals("sjf")){
             this.algorithm = new SJFAlgorithm();
+        }else if(algo.equals("rr")){
+            this.algorithm = new RRAlgorithm();
         }
         int count = Integer.parseInt(processCountField.getText());
         this.processList = algorithm.generateProcessList(this.processList,count);
@@ -130,6 +133,7 @@ public class OsController implements Initializable,Runnable {
     }
 
     public void animation(){
+        int curcleTime = 0;
         while(!this.processList.isEmpty()){
             PCB curPcb = this.processList.remove(0);
             double processNeedTime = Double.parseDouble(curPcb.getNeedTime());
@@ -151,6 +155,19 @@ public class OsController implements Initializable,Runnable {
                 processWorkTime += 0.5;
                 curPcb.setWorkTime(String.valueOf(processWorkTime));
 
+
+                // RR 调度算法
+                curcleTime ++;
+                if (this.algo.equals("rr")){
+                    if(curcleTime == 4){
+                        this.processList.add(curPcb);
+                        curcleTime = 0;
+                        break;
+                    }else{
+                        continue;
+                    }
+
+                }
                 //随机生成新的 pcb
                 Random r = new Random();
                 if (r.nextInt(30) > 15){
