@@ -39,4 +39,18 @@ public class Algorithm {
     public ObservableList<PCB> getProcessList() {
         return processList;
     }
+
+    public PCB producePCB(){
+        int maxArrivalTime = this.count;
+        int maxPriority = 10;
+        int maxNeedTime = 15;
+        Random r = new Random();
+        String arrivalTime = String.valueOf(r.nextInt(maxArrivalTime));
+        String priority = String.valueOf(r.nextInt(maxPriority));
+        String needTime = String.valueOf(r.nextInt(maxNeedTime));
+        String processId = String.valueOf(r.nextInt(30));
+        PCB pcb = new PCB(processId,priority,arrivalTime,needTime);
+
+        return pcb;
+    }
 }

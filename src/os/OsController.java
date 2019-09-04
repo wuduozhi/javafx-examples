@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
+import java.util.Random;
 import java.util.ResourceBundle;
 
 
@@ -58,9 +59,14 @@ public class OsController implements Initializable,Runnable {
     @FXML
     private Label curentProcessTotalTime;
 
+    @FXML
+    private CheckBox preEmptiveCheckBox;
+
     final ToggleGroup radioGroup = new ToggleGroup();
     ObservableList<PCB> processList = null;
     Algorithm algorithm ;
+    String algo;
+    boolean preEmptive;
     Timeline timeline;
 
     @FXML
@@ -82,18 +88,25 @@ public class OsController implements Initializable,Runnable {
         }
 
         String algo = radioGroup.getSelectedToggle().getUserData().toString();
-
+        this.algo = algo;
         // 初始化算法
         if(algo.equals("fcfs")){
             this.algorithm = new FCFSAlgorithm();
         }else if(algo.equals("priority")){
             this.algorithm = new PriorityAlgorithm();
+        }else if(algo.equals("sjf")){
+            this.algorithm = new SJFAlgorithm();
         }
         int count = Integer.parseInt(processCountField.getText());
         this.processList = algorithm.generateProcessList(this.processList,count);
 
         System.out.println("process count:" + processCountField.getText());
         System.out.println("algo:"+algo);
+
+        this.preEmptive = preEmptiveCheckBox.isSelected();
+        if (this.preEmptive){
+            System.out.println("preEmptive select");
+        }
     }
 
     @Override
@@ -118,9 +131,9 @@ public class OsController implements Initializable,Runnable {
 
     public void animation(){
         while(!this.processList.isEmpty()){
-            PCB pcb = this.processList.remove(0);
-            double processNeedTime = Double.parseDouble(pcb.getNeedTime());
-            double processWorkTime = Double.parseDouble(pcb.getWorkTime());
+            PCB curPcb = this.processList.remove(0);
+            double processNeedTime = Double.parseDouble(curPcb.getNeedTime());
+            double processWorkTime = Double.parseDouble(curPcb.getWorkTime());
 
             while(processWorkTime < processNeedTime){
                 double process = processWorkTime / processNeedTime;
@@ -128,7 +141,7 @@ public class OsController implements Initializable,Runnable {
                 Platform.runLater(() -> {
                     this.curentProcessBar.setProgress(process);
                     this.curentProcessIndicator.setProgress(process);
-                    this.setCurentPcb(pcb);
+                    this.setCurentPcb(curPcb);
                 });
                 try{
                     Thread.sleep(1000);
@@ -136,7 +149,57 @@ public class OsController implements Initializable,Runnable {
                     System.out.println("Thread sleep error");
                 }
                 processWorkTime += 0.5;
-                pcb.setWorkTime(String.valueOf(processWorkTime));
+                curPcb.setWorkTime(String.valueOf(processWorkTime));
+
+                //随机生成新的 pcb
+                Random r = new Random();
+                if (r.nextInt(30) > 15){
+                    PCB nPcb = this.algorithm.producePCB();
+                    boolean flag = false;
+                    System.out.println("create new pcb" + nPcb);
+                    // 是否抢占
+                    if(this.preEmptive){
+                        if(this.algo.equals("fcfs")){
+                            if(Integer.parseInt(nPcb.getArrivalTime()) < Integer.parseInt(curPcb.getArrivalTime())){
+                                System.out.println("preEmptive");
+                                flag = true;
+                            }else{
+                                this.processList.add(nPcb);
+                            }
+                        }else if(this.algo.equals("priority")){
+                            if(Integer.parseInt(nPcb.getPriority()) < Integer.parseInt(curPcb.getPriority())){
+                                System.out.println("preEmptive");
+                                flag = true;
+                            }else{
+                                this.processList.add(nPcb);
+                            }
+                        }else if(this.algo.equals("sjf")){
+                            if(Integer.parseInt(nPcb.getNeedTime()) < Integer.parseInt(curPcb.getNeedTime())){
+                                System.out.println("preEmptive");
+                                flag = true;
+                            }else{
+                                this.processList.add(nPcb);
+                            }
+                        }
+
+                        // 处理抢占对象
+                        if(flag){
+                            PCB  curPcbCopy = new PCB(curPcb.getProcessId(),curPcb.getPriority(),curPcb.getArrivalTime(),curPcb.getNeedTime());
+                            curPcbCopy.setWorkTime(curPcb.getWorkTime());
+                            this.processList.add(curPcbCopy);
+                            curPcb.setPriority(nPcb.getPriority());
+                            curPcb.setWorkTime(nPcb.getWorkTime());
+                            curPcb.setNeedTime(nPcb.getNeedTime());
+                            curPcb.setProcessId(nPcb.getProcessId());
+                        }
+
+                        this.processList = this.algorithm.dispatcher();
+
+                    }else{
+                        this.processList.add(nPcb);
+                        this.processList = this.algorithm.dispatcher();
+                    }
+                }
             }
         }
     }

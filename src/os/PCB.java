@@ -79,4 +79,15 @@ public class PCB {
     public void setArrivalTime(String arrivalTime) {
         this.arrivalTime.set(arrivalTime);
     }
+
+    @Override
+    public String toString() {
+        return "PCB{" +
+                "processId=" + processId +
+                ", priority=" + priority +
+                ", arrivalTime=" + arrivalTime +
+                ", workTime=" + workTime +
+                ", needTime=" + needTime +
+                '}';
+    }
 }
