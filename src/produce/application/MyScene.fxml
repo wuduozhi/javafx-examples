@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="producerAndConsumerScene" prefHeight="608.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="produce.application.MyController">
+   <children>
+      <Label layoutX="19.0" layoutY="19.0" prefHeight="15.0" prefWidth="58.0" text="生产者" />
+      <TableView fx:id="producerTable" layoutX="19.0" layoutY="45.0" prefHeight="203.0" prefWidth="756.0" tableMenuButtonVisible="true">
+        <columns>
+          <TableColumn editable="false" prefWidth="126.0" text="序号" />
+            <TableColumn prefWidth="128.0" text="线程标识符" />
+            <TableColumn editable="false" minWidth="0.0" prefWidth="68.0" text="生产速度" />
+          <TableColumn editable="false" prefWidth="84.0" text="创建时间" />
+            <TableColumn prefWidth="75.0" text="启动时间" />
+            <TableColumn editable="false" prefWidth="129.0" text="状态" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <Label layoutX="18.0" layoutY="316.0" prefHeight="15.0" prefWidth="58.0" text="消费者" />
+      <TableView fx:id="consumerTable" layoutX="18.0" layoutY="348.0" prefHeight="203.0" prefWidth="756.0" tableMenuButtonVisible="true">
+         <columns>
+            <TableColumn editable="false" prefWidth="56.0" text="序号" />
+            <TableColumn prefWidth="93.0" text="线程标识符" />
+            <TableColumn prefWidth="54.0" text="消费速度" />
+            <TableColumn editable="false" prefWidth="106.0" text="创建时间" />
+            <TableColumn prefWidth="32.0" text="启动时间" />
+            <TableColumn editable="false" prefWidth="64.0" text="状态" />
+         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <Label layoutX="785.0" layoutY="19.0" prefHeight="15.0" prefWidth="127.0" text="仓库（共享缓冲区）" />
+      <TableView fx:id="productTable" layoutX="785.0" layoutY="45.0" prefHeight="506.0" prefWidth="239.0" tableMenuButtonVisible="true">
+        <columns>
+          <TableColumn prefWidth="49.0" text="序号" />
+            <TableColumn editable="false" prefWidth="188.0" text="产品ID" />
+        </columns>
+      </TableView>
+      <Label layoutX="21.0" layoutY="262.0" text="选中生产者序号" />
+      <TextField fx:id="selectProducer" layoutX="113.0" layoutY="258.0" prefHeight="23.0" prefWidth="84.0" />
+      <Button fx:id="proPause" layoutX="217.0" layoutY="258.0" mnemonicParsing="false" onAction="#ProPauseClick" prefHeight="23.0" prefWidth="84.0" text="暂停生产" />
+      <Button fx:id="proConti" layoutX="311.0" layoutY="258.0" mnemonicParsing="false" onAction="#ProContiClick" prefHeight="23.0" prefWidth="84.0" text="继续生产" />
+      <Button fx:id="proRateDec" layoutX="406.0" layoutY="258.0" mnemonicParsing="false" onAction="#ProRateDecClick" prefHeight="23.0" prefWidth="84.0" text="生产速度-" />
+      <Button fx:id="proRateInc" layoutX="501.0" layoutY="258.0" mnemonicParsing="false" onAction="#ProRateIncClick" prefHeight="23.0" prefWidth="84.0" text="生产速度+" />
+      <Button fx:id="proClear" layoutX="596.0" layoutY="258.0" mnemonicParsing="false" onAction="#ProClearClick" prefHeight="23.0" prefWidth="84.0" text="清除生产者" />
+      <Button fx:id="proAdd" layoutX="691.0" layoutY="258.0" mnemonicParsing="false" onAction="#ProAddClick" prefHeight="23.0" prefWidth="84.0" text="增加生产者" />
+      <Label layoutX="19.0" layoutY="565.0" prefHeight="15.0" prefWidth="84.0" text="选中消费者序号" />
+      <TextField fx:id="selectConsumer" layoutX="115.0" layoutY="561.0" prefHeight="23.0" prefWidth="84.0" />
+      <Button fx:id="conPause" layoutX="217.0" layoutY="561.0" mnemonicParsing="false" onAction="#ConPauseClick" prefHeight="23.0" prefWidth="84.0" text="暂停消费" />
+      <Button fx:id="conConti" layoutX="312.0" layoutY="561.0" mnemonicParsing="false" onAction="#ConContiClick" prefHeight="23.0" prefWidth="84.0" text="继续消费" />
+      <Button fx:id="conRateDec" layoutX="407.0" layoutY="561.0" mnemonicParsing="false" onAction="#ConRateDecClick" prefHeight="23.0" prefWidth="84.0" text="消费速度-" />
+      <Button fx:id="conRateInc" layoutX="502.0" layoutY="561.0" mnemonicParsing="false" onAction="#ConRateIncClick" prefHeight="23.0" prefWidth="84.0" text="消费速度+" />
+      <Button fx:id="conClear" layoutX="597.0" layoutY="561.0" mnemonicParsing="false" onAction="#ConClearClick" prefHeight="23.0" prefWidth="84.0" text="清除消费者" />
+      <Button fx:id="conAdd" layoutX="692.0" layoutY="561.0" mnemonicParsing="false" onAction="#ConAddClick" prefHeight="23.0" prefWidth="84.0" text="增加消费者" />
+      <Button layoutX="77.0" layoutY="312.0" mnemonicParsing="false" onAction="#ConPauseAllClick" text="全部暂停消费" />
+      <Button layoutX="176.0" layoutY="312.0" mnemonicParsing="false" onAction="#ConContiAllClick" text="全部开始消费" />
+      <Button layoutX="176.0" layoutY="15.0" mnemonicParsing="false" onAction="#ProContiAllClick" prefHeight="23.0" prefWidth="88.0" text="全部开始生产" />
+      <Button layoutX="77.0" layoutY="15.0" mnemonicParsing="false" onAction="#ProPauseAllClick" text="全部暂停生产" />
+      <Button layoutX="274.0" layoutY="15.0" mnemonicParsing="false" onAction="#ProClearAllClick" prefHeight="23.0" prefWidth="106.0" text="清除所有生产者" />
+      <Button layoutX="277.0" layoutY="312.0" mnemonicParsing="false" onAction="#ConClearAllClick" text="清除所有消费者" />
+   </children>
+</AnchorPane>
